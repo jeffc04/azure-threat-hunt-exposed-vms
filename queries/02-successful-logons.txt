@@ -1,0 +1,9 @@
+// Identify successful remote logons on top exposed VMs
+DeviceLogonEvents 
+| where Timestamp > ago(7d)
+| where DeviceName in~ ("judewindowsvm", "window-10-tm", "edr-machine") // top exposed devices
+| where LogonType in ("RemoteInteractive", "Network")
+| where ActionType == "LogonSuccess"
+| summarize logon_attempts = count(), unique_accounts = dcount(AccountName) by DeviceName, RemoteIP
+| project DeviceName, RemoteIP, logon_attempts, unique_accounts
+| sort by logon_attempts desc

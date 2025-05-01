@@ -1,0 +1,6 @@
+// Look for execution of common attack tools (LOLBins)
+DeviceProcessEvents
+| where DeviceName == "edr-machine"
+| where FileName in~ ("cmd.exe", "powershell.exe", "wscript.exe", "regsvr32.exe", "certutil.exe", "mshta.exe", "rundll32.exe")
+| project Timestamp, FileName, ProcessCommandLine, InitiatingProcessAccountName, FolderPath, InitiatingProcessFileName
+| sort by Timestamp desc

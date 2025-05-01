@@ -1,0 +1,10 @@
+// Investigate all PowerShell activity on the VM during the investigation window
+// and flag commands executed by the known attacker account (ds9-cisco)
+
+DeviceProcessEvents
+| where DeviceName == "edr-machine"
+| where FileName == "powershell.exe"
+| where Timestamp between (datetime(2025-04-27 13:00:00) .. datetime(2025-04-27 14:00:00))
+| extend SuspectedAttacker = iff(InitiatingProcessAccountName == "ds9-cisco", "Yes", "No")
+| project Timestamp, FileName, ProcessCommandLine, InitiatingProcessAccountName, SuspectedAttacker, FolderPath, InitiatingProcessFileName
+| sort by Timestamp asc

@@ -1,0 +1,6 @@
+// Investigate all processes executed by the attacker-controlled account
+DeviceProcessEvents
+| where DeviceName == "edr-machine"
+| where InitiatingProcessAccountName == "ds9-cisco"
+| project Timestamp, FileName, ProcessCommandLine, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessAccountName
+| sort by Timestamp asc

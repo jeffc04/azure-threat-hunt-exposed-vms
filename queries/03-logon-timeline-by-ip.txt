@@ -1,0 +1,7 @@
+// Get timestamps for each successful login from a specific external IP
+DeviceLogonEvents
+| where DeviceName == "edr-machine"
+| where RemoteIP == "172.98.33.169"
+| where ActionType == "LogonSuccess"
+| project Timestamp, AccountName, DeviceName, RemoteIP, LogonType
+| sort by Timestamp asc

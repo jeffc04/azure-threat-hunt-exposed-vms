@@ -1,0 +1,5 @@
+// Identify VMs that are accepting inbound connections from public IPs
+DeviceNetworkEvents
+| where RemoteIPType == "Public" and ActionType == "InboundConnectionAccepted"
+| summarize connection_count = count() by DeviceName, RemoteIP, InitiatingProcessFileName
+| top 10 by connection_count
